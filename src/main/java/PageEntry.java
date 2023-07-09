@@ -10,11 +10,6 @@ public class PageEntry implements Comparable<PageEntry> {
         this.count = count;
     }
 
-//    public PageEntry(){
-//        this.pdfName = getPdfName();
-//        this.page  = getPage();
-//        this.count = getCount();
-//    }
 
     public String getPdfName() {
         return pdfName;
@@ -44,8 +39,6 @@ public class PageEntry implements Comparable<PageEntry> {
         } else if (o.count < count) {
             return -1; // возвращаем отрицательное число, чтобы отсортировать текущий объект перед объектом o
         }
-        return 0; // возвращаем ноль, если значения count равны
+        return 0; // возвращаем 0, если значения count равны
     }
-
-
 }

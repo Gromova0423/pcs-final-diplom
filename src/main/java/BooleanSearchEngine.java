@@ -8,7 +8,7 @@ import java.io.IOException;
 import java.util.*;
 
 public class BooleanSearchEngine implements SearchEngine {
-    private Map<String, List<PageEntry>> index; // обратный индекс
+    private Map<String, List<PageEntry>> index = new HashMap<>(); // обратный индекс
 
 
     public BooleanSearchEngine(File pdfsDir) throws IOException {
@@ -35,26 +35,40 @@ public class BooleanSearchEngine implements SearchEngine {
                         word = word.toLowerCase();
                         freqs.put(word, freqs.getOrDefault(word, 0) + 1);  //freqs - словарь, где ключами являются уникальные слова из списка words, а значениями - количество вхождений каждого слова в тексте.
                     }
+//                    System.out.println(freqs);
 
 
-                    index = new HashMap<>();
+                    Map<String, Integer> mapPage = new HashMap<>();
+                    for (var word : words) {
+                        if (word.isEmpty()) {
+                            continue;
+                        }
+                        word = word.toLowerCase();
+                        mapPage.put(word, doc.getPageNumber(page));
+                    }
+//                    System.out.println(mapPage);
+
+
+                    // создаем вне конструктора мапу для поиска (index = new HashMap<>())
                     for (var word : words) { // перебираем слова в массиве
                         if (word.isEmpty()) {
                             continue;
                         }
                         word = word.toLowerCase(); // приведем слово к нижнему регистру
-                        PageEntry pageEntry = new PageEntry(file.getName(), page.getDocument().getPageNumber(page), freqs.get(word));
+                        PageEntry pageEntry = new PageEntry(file.getName(), mapPage.get(word), freqs.get(word));
                         List<PageEntry> pageEntryList = index.get(word);
                         if (pageEntryList == null) {
                             pageEntryList = new ArrayList<>();
                             index.put(word, pageEntryList);// добавляем pageEntryList в HashMap<>()
                         }
-                        pageEntryList.add(pageEntry);
-                        Collections.sort(pageEntryList);
+                        Set<PageEntry> uniqueEntries = new HashSet<>();
+                        if (!uniqueEntries.contains(pageEntry)) { // проверим содержится ли pageEntry в uniqueEntries
+                            pageEntryList.add(pageEntry); // добавим в index = new HashMap<>() только уникальные значения pageEntryList
+                            Collections.sort(pageEntryList);
+                        }
                     }
-//                    System.out.println(index);
-
                 }
+
                 doc.close();
                 reader.close();
             }
@@ -66,9 +80,8 @@ public class BooleanSearchEngine implements SearchEngine {
         List<PageEntry> pageEntries = index.get(word);
         if (pageEntries == null) {
             return Collections.emptyList();
-        } else {
-            return pageEntries;
         }
+        return pageEntries;
     }
 
 }
