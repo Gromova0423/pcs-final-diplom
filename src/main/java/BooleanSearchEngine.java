@@ -9,10 +9,11 @@ import java.util.*;
 
 public class BooleanSearchEngine implements SearchEngine {
     private Map<String, List<PageEntry>> index = new HashMap<>(); // обратный индекс
-
+    private Map<String, Integer> freqs;
+    String directory = "D:\\NETOLOGIA\\pcs-final-diplom\\pcs-final-diplom\\pdfs";
 
     public BooleanSearchEngine(File pdfsDir) throws IOException {
-        pdfsDir = new File("D:\\NETOLOGIA\\pcs-final-diplom\\pcs-final-diplom\\pdfs");
+        pdfsDir = new File(directory);
         File[] files = pdfsDir.listFiles();
 
 
@@ -27,7 +28,7 @@ public class BooleanSearchEngine implements SearchEngine {
                     ArrayList<String> words = new ArrayList<>(Arrays.asList(wordsArray));// делим текст на слова \\P{IsAlphabetic}+ означает "любой символ, который не является буквой"
 
 
-                    Map<String, Integer> freqs = new HashMap<>(); // мапа, где ключом будет слово, а значением - частота. Пример мапы: (после=2, актуализация=1, последующей=2, рекламные=1)
+                   freqs = new HashMap<>(); // мапа, где ключом будет слово, а значением - частота. Пример мапы: (после=2, актуализация=1, последующей=2, рекламные=1)
                     for (var word : words) {
                         if (word.isEmpty()) {
                             continue;
