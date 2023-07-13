@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Main {
     public static void main(String[] args) throws Exception {
-        BooleanSearchEngine engine = new BooleanSearchEngine(new File("pdfs"));
+        BooleanSearchEngine engine = new BooleanSearchEngine(new File("pcs-final-diplom/pdfs"));
 //        System.out.println(engine.search("бизнес"));
 
         try (ServerSocket serverSocket = new ServerSocket(8989);) { // стартуем сервер один(!) раз
